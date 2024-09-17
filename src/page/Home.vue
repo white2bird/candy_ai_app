@@ -1,7 +1,7 @@
 <template>
   <div class="ai_all">
       <div class="ai_aside">
-        this is aside
+        <Aside></Aside>
       </div>
 
       <div class="ai_main">
@@ -17,7 +17,7 @@
   import { reactive, ref, toRefs, onBeforeMount, onMounted } from 'vue'
   import { RouterLink, RouterView } from 'vue-router';
   
-  import Aside from '@/components/Home-components/Aside.vue';
+  import Aside from '@/components/Aside.vue';
 
   
   
@@ -40,7 +40,7 @@
       width: 100%;
       height: 100%;
       background-color: #fff;
-      flex-shrink: 5;
+      flex-shrink: 10;
     }
     .ai_main{
       display: flex;

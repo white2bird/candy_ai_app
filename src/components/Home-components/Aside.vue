@@ -1,15 +1,15 @@
 <template>
     <div class="body">
-        <el-avatar :size="75" shape='circle' :src=imageurl  style="margin-top: 45px;margin-bottom: 20px;" :lazy="true"/>
+        <el-avatar :size="75" shape='circle' :src="url('/images/touxiang.jpg')"  style="margin-top: 45px;margin-bottom: 20px;" :lazy="true"/>
         
         <div class="info">
             <strong>Lyubov Kurach</strong>
             <p>2279118516@qq.com</p>
         </div>
-        <el-avatar :size="25" shape='square' :src=vipimage_activate :v-show="vip_show"/>
-        <el-avatar :size="25" shape='square' :src=vipimage v-show="!vip_show"/>
+        <!-- <el-avatar :size="25" shape='square' :src=vipimage_activate :v-show="vip_show"/>
+        <el-avatar :size="25" shape='square' :src=vipimage v-show="!vip_show"/> -->
         <el-divider>
-            <el-icon><star-filled /></el-icon>
+            <el-icon></el-icon>
         </el-divider>
 
 

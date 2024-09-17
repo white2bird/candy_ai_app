@@ -8,7 +8,6 @@
 <style scoped>
 .role_platform{
     display: flex;
-    background-color: blue;
     background-clip: content-box;
     height: 100%;
     flex: 1;

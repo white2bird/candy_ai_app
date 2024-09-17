@@ -4,6 +4,7 @@ import App from './App.vue'
 import store from './store'
 import request from './utils/request'
 import router from './router'
+import 'element-plus/dist/index.css'
 
 
 const app = createApp(App)
