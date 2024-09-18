@@ -69,9 +69,7 @@ let imageurl = "/images/touxiang.jpg"
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: red;
-
-       
+        background-color:rgb(240,240,240);
     }
 }
 

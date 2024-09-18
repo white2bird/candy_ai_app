@@ -7,7 +7,8 @@ const routes = [
       children: [
         { path: 'roles', component: RolePlatform },
       ]
-    }
+    },
+    { path: '/:catchAll(.*)', redirect: '/Home' },
 ]
 
 
