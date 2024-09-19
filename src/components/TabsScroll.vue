@@ -23,7 +23,7 @@
                     <div v-for="(tab, index) in tabs" :key="index" class="section">
                         <h2>{{ tab.title }}</h2>
                         <div class="sub-items">
-                            <div v-for="(item, idx) in tab.items" :key="idx" class="sub-item">
+                            <div v-for="(item, idx) in tab.items" :key="idx" class="sub-item" @click="choseRole(index,idx)">
                                 {{ item }}
                             </div>
                         </div>
@@ -33,7 +33,7 @@
 
         </div>
         <div class="model_platform_footer">
-
+                北京公安局备案 号：京ICP备2021010001号-1
         </div>
     </div>
 </template>
@@ -67,7 +67,7 @@ const tabs = ref([
 const activeTabIndex = ref(0);
 const sections = ref([]);
 const contentRef = ref(null);
-const vueTabs = ref(null);
+const vueTabs = ref([]);
 const tabsRef = ref(null);
 const click_to_tab = ref(false);
 
@@ -83,9 +83,9 @@ let set_click_close;
 const scrollToSection = (index) => {
     if (sections.value[index]) {
         clearTimeout(set_click_close)
-        click_to_tab.value = true
-        sections.value[index].scrollIntoView({ behavior: 'smooth' });
-        activeTabIndex.value = index;
+        click_to_tab.value = true        
+        sections.value[index].scrollIntoView({ behavior: 'smooth' })
+        activeTabIndex.value = index
         // 防止抖动
         set_click_close = setTimeout(() => {
             // 防止滚动事件影响点击态
@@ -99,13 +99,15 @@ onMounted(async () => {
     await nextTick();
     // 获取所有的 section 元素
     const current_section = contentRef.value.querySelectorAll('.section');
+    vueTabs.value = tabsRef.value.querySelectorAll('.tab');
+    console.log(vueTabs)
     tabPostionY.value = tabsRef.value.getBoundingClientRect().y
     tabHeight.value = tabsRef.value?.clientHeight
 
     // 监听滚动事件
     window.addEventListener('scroll', scroll, true)
 
-    vueTabs.value = tabsRef.value
+    
     if (current_section !== undefined && current_section !== null && current_section.length > 0) {
         sections.value = current_section;
     }
@@ -139,6 +141,10 @@ onBeforeUnmount(() => {
     }
 });
 
+const choseRole = (tab_index, item_index) => {
+    console.log('happened click', tab_index, item_index)
+}
+
 </script>
 
 <style lang="less">
@@ -146,6 +152,7 @@ onBeforeUnmount(() => {
     display: flex;
     flex: 1;
     flex-direction: column;
+    height: 100%;
     padding-left: 64px;
     padding-right: 64px;
 }
@@ -157,8 +164,25 @@ onBeforeUnmount(() => {
 
 .model_platform_content {
     flex: 1;
-    max-height: 700px;
+    max-height: 80%;
     overflow-x: auto;
+    margin-bottom: 60px;
+}
+
+.model_platform_footer {
+    display: flex;
+    flex-shrink: 1;
+    height: 50px;
+    font-size: 20px;
+    // background-color: red;
+    position: absolute;
+    width: 70%;
+    margin:0 auto;
+    align-items: center;
+    box-sizing: border-box;
+    justify-content: center;
+    bottom: 0px;
+    z-index: 5;
 }
 
 
@@ -169,6 +193,7 @@ onBeforeUnmount(() => {
     margin-top:40px;
     position: sticky;
     z-index: 1;
+    // overflow: scroll;
     // scroll-behavior: smooth;
     // background-color: #f0f0f0;
 }
@@ -177,7 +202,10 @@ onBeforeUnmount(() => {
     border-radius: 5px;
     padding: 10px 20px;
     margin-right: 10px;
-    background-color: #e0e0e0;
+    // background-color: #e0e0e0;
+    background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+    // background-image: linear-gradient( 135deg, #ABDCFF 10%, #0396FF 100%);
+    // background-color: linear-gradient( 135deg, #ABDCFF 10%, #0396FF 100%);
     max-width: 80px;
     height: 40px;
     display: flex;
@@ -187,9 +215,13 @@ onBeforeUnmount(() => {
     flex-grow: 1;
     flex-shrink: 1;
 }
+.tab :hover{
+    cursor:pointer
+}
 
 .tab.active {
     background-color: #ffffff;
+    background-image: none;
     // border-bottom: 2px solid #42b983;
 }
 
@@ -215,7 +247,8 @@ onBeforeUnmount(() => {
     display: flex;
     height: 50px;
     width: 100px;
-    background-color: red;
+    // background-color: red;
+    background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
     padding: 5px;
     justify-content:center;
     align-items: center;
