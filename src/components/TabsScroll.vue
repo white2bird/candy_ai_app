@@ -44,7 +44,7 @@ import { ref, onMounted, onBeforeUnmount, nextTick, getCurrentInstance } from 'v
 const tabs = ref([
     {
         title: 'Tab 1',
-        items: ['Item 1-1', 'Item 1-2', 'Item 1-3'],
+        items: ['Item 1-1', 'Item 1-2', 'Item 1-3', 'Item 1-4', 'Item 1-5', 'Item 1-6', 'Item 1-7', 'Item 1-8'],
     },
     {
         title: 'Tab 2',
@@ -52,6 +52,14 @@ const tabs = ref([
     },
     {
         title: 'Tab 3',
+        items: ['Item 3-1', 'Item 3-2', 'Item 3-3'],
+    },
+    {
+        title: 'Tab 4',
+        items: ['Item 3-1', 'Item 3-2', 'Item 3-3'],
+    },
+    {
+        title: 'Tab 5',
         items: ['Item 3-1', 'Item 3-2', 'Item 3-3'],
     },
 ]);
@@ -149,28 +157,44 @@ onBeforeUnmount(() => {
 
 .model_platform_content {
     flex: 1;
-    max-height: 500px;
+    max-height: 700px;
     overflow-x: auto;
 }
 
 
 .tabs {
     display: flex;
-    background-color: #f0f0f0;
+    top: 0;
+    margin-left: 20px;
+    margin-top:40px;
+    position: sticky;
+    z-index: 1;
+    // scroll-behavior: smooth;
+    // background-color: #f0f0f0;
 }
 
 .tab {
+    border-radius: 5px;
     padding: 10px 20px;
+    margin-right: 10px;
+    background-color: #e0e0e0;
+    max-width: 80px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    flex-grow: 1;
+    flex-shrink: 1;
 }
 
 .tab.active {
     background-color: #ffffff;
-    border-bottom: 2px solid #42b983;
+    // border-bottom: 2px solid #42b983;
 }
 
 .content {
-    height: 400px;
+    // max-height: 700px;
     overflow-y: auto;
     position: relative;
 }
@@ -182,9 +206,23 @@ onBeforeUnmount(() => {
 
 .sub-items {
     margin-top: 10px;
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
 }
 
 .sub-item {
-    padding: 5px 0;
+    display: flex;
+    height: 50px;
+    width: 100px;
+    background-color: red;
+    padding: 5px;
+    justify-content:center;
+    align-items: center;
+    margin-right: 30px;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-size: 18px;
 }
 </style>

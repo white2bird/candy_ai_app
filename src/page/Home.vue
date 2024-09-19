@@ -32,7 +32,7 @@
       display: flex;
       width: 100%;
       height: 100%;
-      background-color: red;
+      /* background-color: red; */
     }
     .ai_aside{
       /* min-width: 20px; */
@@ -46,7 +46,7 @@
       display: flex;
       flex-grow: 8;
       flex-shrink: 1;
-      background-color: aqua;
+      /* background-color: aqua; */
       height: 100%;
       width: 100%;
     }

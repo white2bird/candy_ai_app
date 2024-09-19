@@ -11,6 +11,7 @@ import TabsScroll from '@/components/TabsScroll.vue';
 <style scoped>
 .role_platform{
     display: flex;
+    background-image: url('/images/background.jpg');
     background-clip: content-box;
     height: 100%;
     flex: 1;
