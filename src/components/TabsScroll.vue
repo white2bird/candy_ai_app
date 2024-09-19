@@ -10,7 +10,7 @@
         <div class="model_platform_content">
             <!-- 此处放tabes 组件 -->
             <div>
-                <div class="tabs" ref="tabsRef">
+                <div class="tabs" ref="tabsRef" style="overflow: hidden;">
                     <div v-for="(tab, index) in tabs" :key="index"
                         :class="['tab', { active: activeTabIndex === index }]" @click="scrollToSection(index)">
                         {{ tab.title }}
