@@ -3,7 +3,7 @@
         <div class="model_platform_header">
             <div>
                 <img style="width: 312px; height: 24px; margin-right: 160px;"
-                    src="@/assets/model_platform_header.png" />
+                    src="/images/model_platform_header.png" />
             </div>
         </div>
 
