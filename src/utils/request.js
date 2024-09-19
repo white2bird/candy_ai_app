@@ -10,6 +10,7 @@ request.interceptors.request.use(
     (config) => {
         // 发送之前带上token
         var token = localStorage.getItem("token")
+        console.log('---before---request------', token)
         if(token != null && token != ""){
             config.headers.token = token
         }

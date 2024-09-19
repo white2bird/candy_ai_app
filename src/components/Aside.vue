@@ -72,14 +72,12 @@ const itemClick = (index) => {
     console.log('---path---', route)
 }
 
-const logined = computed(() =>
-    store.state.loginButtonName !== '登录/注册'
-
+const logined = computed(() => { return store.state.loginButtonName !== '登录/注册' }
 )
 
 const hideDropdown = () => {
     // 使其不可见
-    if(logined === true){
+    if (logined.value === true) {
         exitButtonVisibility.value = false
     }
 }
@@ -88,25 +86,26 @@ const logout = () => {
     $request.get('/user/logout')
         .then(res => {
             console.log('logout', res)
-
+            window.localStorage.clear()
+            exitButtonVisibility.value = false
+            store.dispatch('updateUsername', '登录/注册')
         })
-    localStorage.clear()
-    store.dispatch('updateUsername', '登录/注册')
+
 }
 
 
 const loginOrRegister = () => {
-    if (logined === true) {
+    if (logined.value === true) {
         // 已经登陆
         exitButtonVisibility.value = true;
         return
     }
     // 非登陆情况
-    console.log('to----login-----')
+    router.push('/login')
 }
 
 const mouseenter = () => {
-    if (logined === true) {
+    if (logined.value === true) {
         // 已经登陆
         exitButtonVisibility.value = true;
         return

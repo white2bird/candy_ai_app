@@ -13,7 +13,7 @@
                 </el-tab-pane>
                 <el-tab-pane label="Sign Up" name="signup">
                     <br>
-                    <SignUpFrom />
+                    <SignUpFrom @registerSuccess="registerSuccess" />
                 </el-tab-pane>
             </el-tabs>
 
@@ -34,6 +34,10 @@ const activeName = ref('login')
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
     console.log('tabclick', tab, event)
+}
+
+const registerSuccess = () => {
+    activeName.value = 'login'
 }
 
 

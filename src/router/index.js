@@ -4,13 +4,14 @@ import Login from '@/page/Login.vue'
 import RolePlatform from '@/views/RolePlatform.vue'
 const routes = [
     {
-      path: '/Home', component: Home,
+      path: '/home', component: Home,
       children: [
+        { path: '', component: RolePlatform},
         { path: 'roles', component: RolePlatform },
       ]
     },
     { path: '/login', component: Login },
-    { path: '/:catchAll(.*)', redirect: '/Home' },
+    { path: '/:catchAll(.*)', redirect: '/home' },
 ]
 
 

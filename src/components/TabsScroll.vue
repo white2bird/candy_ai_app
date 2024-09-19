@@ -136,6 +136,7 @@ onBeforeUnmount(() => {
 <style lang="less">
 .model_platform_main {
     display: flex;
+    flex: 1;
     flex-direction: column;
     padding-left: 64px;
     padding-right: 64px;

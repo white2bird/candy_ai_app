@@ -1,9 +1,12 @@
 <template>
     <div class="role_platform">
-        this is model platform
+         <TabsScroll></TabsScroll>
     </div>
 </template>
 
+<script setup>
+import TabsScroll from '@/components/TabsScroll.vue';
+</script>
 
 <style scoped>
 .role_platform{
