@@ -1,5 +1,5 @@
 // store/index.js
-import { plugin } from 'postcss'
+
 import { createStore } from 'vuex'
 import createPersistedState  from 'vuex-persistedstate'
 

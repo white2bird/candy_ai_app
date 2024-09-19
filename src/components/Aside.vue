@@ -14,7 +14,8 @@
             </el-divider>
         </div>
         <div class="aside-body">
-            <div v-for="(item,index) in menu_list" @click="itemClick(index)" :style="{'display': 'flex', 'justify-content': 'space-around', 'background-color': current_index === index ? 'rgb(240, 240, 240)' : ''}">
+            <div v-for="(item, index) in menu_list" @click="itemClick(index)"
+                :style="{ 'display': 'flex', 'justify-content': 'space-around', 'background-color': current_index === index ? 'rgb(240, 240, 240)' : '' }">
                 <div style="display: flex; width: 40%; justify-content: center;">
                     <img style="width: 40%; height: auto;" :src="item.icon" alt="">
                 </div>
@@ -23,15 +24,17 @@
                 </div>
                 <!-- </div> -->
             </div>
-           
+
         </div>
         <div class="aside-footer">
             <!-- todo hidden处理 -->
-            <div class="exitButton" :style="{'visibility': 'hidden'}"> 
-                <ElButton style="overflow: auto;">exit</ElButton>
+            <div class="exitButton" :style="{ 'visibility': exitButtonVisibility ? 'visible' : 'hidden' }">
+                <ElButton style="overflow: auto; font-size: 13px;" @click="logout" v-click-outside="hideDropdown">退出登录
+                </ElButton>
             </div>
             <div class="loginButton">
-                <ElButton style="overflow: auto;">button</ElButton>
+                <ElButton style="overflow: auto;" @click="loginOrRegister" @mouseenter="mouseenter">{{
+                    loginOrRegisterButtonName }}</ElButton>
             </div>
         </div>
     </div>
@@ -39,16 +42,23 @@
 
 
 <script setup>
-import { ElButton } from 'element-plus';
-import { ref } from 'vue'
+import { ElButton, ClickOutside as vClickOutside } from 'element-plus';
+import { ref, computed, inject } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+
 
 const router = useRouter()
+const store = useStore()
 
-
+const $request = inject('$request')
 const current_index = ref(0)
-let imageurl = "/images/touxiang.jpg"
+const exitButtonVisibility = ref(false)
+const loginOrRegisterButtonName = computed(() =>
+    store.state.loginButtonName
+)
 
+let imageurl = "/images/touxiang.jpg"
 let menu_list = [
     { name: '应用', icon: '/images/apps.png', path: '/' },
     { name: '我的', icon: '/images/own_my.png', path: '/my' }
@@ -60,6 +70,47 @@ const itemClick = (index) => {
     current_index.value = index
     let route = menu_list[index].path
     console.log('---path---', route)
+}
+
+const logined = computed(() =>
+    store.state.loginButtonName !== '登录/注册'
+
+)
+
+const hideDropdown = () => {
+    // 使其不可见
+    if(logined === true){
+        exitButtonVisibility.value = false
+    }
+}
+
+const logout = () => {
+    $request.get('/user/logout')
+        .then(res => {
+            console.log('logout', res)
+
+        })
+    localStorage.clear()
+    store.dispatch('updateUsername', '登录/注册')
+}
+
+
+const loginOrRegister = () => {
+    if (logined === true) {
+        // 已经登陆
+        exitButtonVisibility.value = true;
+        return
+    }
+    // 非登陆情况
+    console.log('to----login-----')
+}
+
+const mouseenter = () => {
+    if (logined === true) {
+        // 已经登陆
+        exitButtonVisibility.value = true;
+        return
+    }
 }
 
 
@@ -106,19 +157,15 @@ const itemClick = (index) => {
     }
 }
 
-
-.ElButton{
-    overflow: auto;
-}
 .aside-footer {
     display: flex;
     position: absolute;
     bottom: 0;
     width: 100%;
     height: 100px;
-    background-color: red;
+    // background-color: red;
     flex-direction: column;
-    padding-right:10px;
+    padding-right: 10px;
 
     justify-content: center;
     align-items: center;
@@ -126,11 +173,29 @@ const itemClick = (index) => {
 }
 
 .exitButton {
-    background-color: red;
+    // background-color: red;
     padding: 0px;
-    transform: translate(10px, 5px); /* 偏移元素 */
-    max-width: 100%; /* 避免子元素超出父容器 */
+
+    // height: 40px;
+    transform: translate(10px, 5px);
+    /* 偏移元素 */
+    max-width: 100%;
+    /* 避免子元素超出父容器 */
     max-height: 100%;
+    overflow: hidden;
+
+}
+
+.loginButton {
+    // background
+    max-width: 100%;
+    /* 避免子元素超出父容器 */
+    // min-width: 88px;
+    max-height: 100%;
+    text-overflow: clip;
+    overflow: hidden;
+    text-align: center;
+
 }
 
 .router-link-active {

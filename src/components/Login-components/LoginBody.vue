@@ -24,8 +24,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import LoginForm from './LoginForm.vue';
-import SignUpFrom from './SignUpFrom.vue';
+import LoginForm from '@/components/Login-components/LoginForm.vue';
+import SignUpFrom from '@/components/Login-components/SignUpForm.vue';
 import type { TabsPaneContext } from 'element-plus'
 
 
@@ -42,6 +42,28 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 <style scoped>
 
 .body {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    margin-top: 0px;
+    justify-content: end;
+}
+    
+.card{
+    /* display: flex; */
+    background-color: rgba(255, 255, 255, 0.2); 
+    /*半透明白色背景，0.8是透明度 */
+    max-width: 440px;
+    max-height: 560px;
+    margin-right: 10%;
+    box-shadow: 0 0 20px;
+    border-radius: 20px;
+    padding-top: 20px;
+    /* margin-top: 20px; */
+    /* position:fixed; */
+}
+
+/* .body {
     height: 100%;
     width: 100%;
     margin-top: 0px;
@@ -49,7 +71,6 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
     
 .card{
     background-color: rgba(255, 255, 255, 0.2); 
-    /*半透明白色背景，0.8是透明度 */
     width: 440px;
     height: 560px;
     margin-left: 60%;
@@ -58,5 +79,5 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
     padding-top: 20px;
     margin-top: 20px;
     position:fixed;
-}
+} */
 </style>

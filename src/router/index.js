@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/page/Home.vue'
+import Login from '@/page/Login.vue'
 import RolePlatform from '@/views/RolePlatform.vue'
 const routes = [
     {
@@ -8,6 +9,7 @@ const routes = [
         { path: 'roles', component: RolePlatform },
       ]
     },
+    { path: '/login', component: Login },
     { path: '/:catchAll(.*)', redirect: '/Home' },
 ]
 

@@ -45,6 +45,8 @@
     /* background-color: #e9eef3; */
     color: #333;
     text-align: center;
+    /* todo del */
+    display: flex;
     
     }
     body{
