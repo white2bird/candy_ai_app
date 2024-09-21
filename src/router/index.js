@@ -2,12 +2,16 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/page/Home.vue'
 import Login from '@/page/Login.vue'
 import RolePlatform from '@/views/RolePlatform.vue'
+import RoleSetting from '@/views/RoleSetting.vue'
+import ModelChat from '@/views/ModelChat.vue'
 const routes = [
     {
       path: '/home', component: Home,
       children: [
         { path: '', component: RolePlatform},
         { path: 'roles', component: RolePlatform },
+        { path: 'roleInit/:roleId', component: RoleSetting, props: true },
+        { path: 'chat', component: ModelChat, props: true, name: 'chat' },
       ]
     },
     { path: '/login', component: Login },

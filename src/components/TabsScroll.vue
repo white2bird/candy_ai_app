@@ -40,6 +40,9 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick, getCurrentInstance } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const tabs = ref([
     {
@@ -143,6 +146,8 @@ onBeforeUnmount(() => {
 
 const choseRole = (tab_index, item_index) => {
     console.log('happened click', tab_index, item_index)
+    router.push('/home/roleInit/' + item_index)
+
 }
 
 </script>
@@ -215,9 +220,7 @@ const choseRole = (tab_index, item_index) => {
     flex-grow: 1;
     flex-shrink: 1;
 }
-.tab :hover{
-    cursor:pointer
-}
+
 
 .tab.active {
     background-color: #ffffff;
@@ -244,6 +247,7 @@ const choseRole = (tab_index, item_index) => {
 }
 
 .sub-item {
+    cursor: pointer;
     display: flex;
     height: 50px;
     width: 100px;
