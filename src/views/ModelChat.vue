@@ -9,7 +9,7 @@
                         <p>{{ message.text }}</p>
                     </div>
                 </div>
-                {{ formatResponseText }}
+                <pre>{{ formatResponseText }}</pre>
             </div>
 
             <div class="chat-input">
@@ -80,7 +80,7 @@ const streamRequest = async () => {
             parts.forEach(part => {
                 if(part.startsWith('data:')){
                     const jsonData = JSON.parse(part.slice(5));
-                    response.value += jsonData.data.receive.content
+                    response.value += jsonData.data.receive.content.replace('\n\n', '\r\n');
                 }
             });
 
