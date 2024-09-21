@@ -25,12 +25,7 @@ request.interceptors.request.use(
 request.interceptors.response.use(
     (response) => {
         // 对响应数据做点什么
-        const data_info = response.data
-        if(data_info.code == 200){
-            return data_info.data;
-        }else{
-            return Promise.reject(data_info.msg)
-        }
+        return response.data
     },
     (error) => {
         // 对响应错误做点什么
