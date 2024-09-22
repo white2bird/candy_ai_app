@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from '../router/index'
 const request = axios.create({
     baseURL: 'http://localhost:8000', // 设置基础 URL
     timeout: 5000, // 请间
@@ -25,6 +26,10 @@ request.interceptors.request.use(
 request.interceptors.response.use(
     (response) => {
         // 对响应数据做点什么
+        // console.log('---response------', response)
+        if(response.data.code == 401){
+            router.push('/login')
+        }
         return response.data
     },
     (error) => {

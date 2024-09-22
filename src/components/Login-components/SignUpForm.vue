@@ -1,8 +1,11 @@
 <template>
     <div class="form">
         <div style="display: flex; ">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" data-v-ea893728=""><path fill="currentColor" d="m64 448 832-320-128 704-446.08-243.328L832 192 242.816 545.472zm256 512V657.024L512 768z"></path></svg>
-            <el-input v-model="email" placeholder="请输入您的邮箱，便于后续找回账号(可选)" clearable @blur="checkemail" type="email"  />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" data-v-ea893728="">
+                <path fill="currentColor"
+                    d="m64 448 832-320-128 704-446.08-243.328L832 192 242.816 545.472zm256 512V657.024L512 768z"></path>
+            </svg>
+            <el-input v-model="email" placeholder="请输入您的邮箱，便于后续找回账号(可选)" clearable @blur="checkemail" type="email" />
         </div>
         <div style="height: 25px;">
             <p v-show="emailtip">*邮箱格式错误</p>
@@ -50,16 +53,17 @@
             <el-checkbox v-model="checked" label="已阅读并同意AI HOME 服务条款 和 隐私政策" size="large"
                 style="float: left; margin-bottom: 10px;" />
         </div>
-        <el-button type="danger" style="margin-bottom: 20px;;margin: 0 0 20px;" round @click="signup">Sign Up</el-button>
+        <el-button type="danger" style="margin-bottom: 20px;;margin: 0 0 20px;" round @click="signup">Sign
+            Up</el-button>
 
         <!-- <el-button type="danger" style="margin-bottom: 20px;margin: 0 0 20px;" round>Sign Up</el-button> -->
 
     </div>
 </template>
 
-<script  setup name='SignUpFrom'>
+<script setup name='SignUpFrom'>
 //导入
-import { reactive, ref, toRefs, onBeforeMount, defineEmits,inject } from 'vue'
+import { reactive, ref, toRefs, onBeforeMount, defineEmits, inject } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router';
 
@@ -72,12 +76,12 @@ const router = useRouter()
 let username = ref('')
 let password = ref('')
 let passwordagain = ref('')
-let email=ref('')
+let email = ref('')
 
 let usernametip = ref(false)
 let passwordtip = ref(false)
 let passwordagaintip = ref(false)
-let emailtip=ref(false)
+let emailtip = ref(false)
 let checked = ref(false)
 
 //方法
@@ -110,20 +114,20 @@ function checkpassword() {
         passwordagaintip.value = false
     }
 }
-function checkemail(){
-    
-    if(email.value==''){
-        emailtip.value=false
+function checkemail() {
+
+    if (email.value == '') {
+        emailtip.value = false
         return
     }
-    var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;  
+    var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     var emailv = emailPattern.test(email.value);
 
-    if(emailv){
-        emailtip.value=false
+    if (emailv) {
+        emailtip.value = false
     }
-    else{
-        emailtip.value=true
+    else {
+        emailtip.value = true
     }
 }
 
@@ -138,20 +142,24 @@ function handleBlur() {
 }
 
 
-function signup(){
-    if(passwordtip.value=== false&&usernametip.value=== false&&passwordagaintip.value=== false){
-    
+function signup() {
+    if (passwordtip.value === false && usernametip.value === false && passwordagaintip.value === false) {
+
         $request.post('/user/register', {
             nickname: username.value,
             password: password.value,
-            email:email.value
+            email: email.value
         }).then(res => {
-            ElMessage.success('注册成功！')
-            emiter('registerSuccess')
-        }).catch(err=>{
+            if (res.code === 200) {
+                ElMessage.success('注册成功！')
+                emiter('registerSuccess')
+            } else {
+                ElMessage.error(res.msg)
+            }
+        }).catch(err => {
             ElMessage.error(err)
         })
-        
+
     }
 }
 </script>

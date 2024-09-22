@@ -90,14 +90,18 @@ function login() {
             password: password.value
         }).then(res => {
             console.log(res)
-            ElMessage.success('登录成功！')
-            localStorage.setItem('token', res.token)
-            store.commit('setUsername', res.userName)
-            router.push('/home')
-        }).catch(err=>{
+            if (res.code === 200) {
+                ElMessage.success('登录成功！')
+                localStorage.setItem('token', res.data.token)
+                store.commit('setUsername', res.data.userName)
+                router.push('/home')
+            } else {
+                ElMessage.error(res.msg)
+            }
+        }).catch(err => {
             ElMessage.error(err)
         })
-        
+
     }
 
     // checkpassword(password.value)

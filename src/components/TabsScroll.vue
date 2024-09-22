@@ -2,8 +2,7 @@
     <div class="model_platform_main">
         <div class="model_platform_header">
             <div>
-                <img style="width: 312px; height: 24px; margin-right: 160px;"
-                    src="/images/model_platform_header.png" />
+                <img style="width: 312px; height: 24px; margin-right: 160px;" src="/images/model_platform_header.png" />
             </div>
         </div>
 
@@ -14,7 +13,7 @@
                     <div v-for="(tab, index) in tabs" :key="index"
                         :class="['tab', { active: activeTabIndex === index }]" @click="scrollToSection(index)">
                         {{ tab.title }}
-                        {{ index }}
+
                     </div>
                 </div>
 
@@ -23,8 +22,9 @@
                     <div v-for="(tab, index) in tabs" :key="index" class="section">
                         <h2>{{ tab.title }}</h2>
                         <div class="sub-items">
-                            <div v-for="(item, idx) in tab.items" :key="idx" class="sub-item" @click="choseRole(index,idx)">
-                                {{ item }}
+                            <div v-for="(item, idx) in tab.items" :key="idx" class="sub-item"
+                                @click="choseRole(index, idx)">
+                                {{ item.name }}
                             </div>
                         </div>
                     </div>
@@ -33,38 +33,24 @@
 
         </div>
         <div class="model_platform_footer">
-                北京公安局备案 号：京ICP备2021010001号-1
+            北京公安局备案 号：京ICP备2021010001号-1
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, nextTick, getCurrentInstance } from 'vue';
+import { ref, onMounted, onBeforeUnmount, nextTick, getCurrentInstance, inject, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const $request = inject('$request');
 
 const tabs = ref([
-    {
-        title: 'Tab 1',
-        items: ['Item 1-1', 'Item 1-2', 'Item 1-3', 'Item 1-4', 'Item 1-5', 'Item 1-6', 'Item 1-7', 'Item 1-8'],
-    },
-    {
-        title: 'Tab 2',
-        items: ['Item 2-1', 'Item 2-2', 'Item 2-3'],
-    },
-    {
-        title: 'Tab 3',
-        items: ['Item 3-1', 'Item 3-2', 'Item 3-3'],
-    },
-    {
-        title: 'Tab 4',
-        items: ['Item 3-1', 'Item 3-2', 'Item 3-3'],
-    },
-    {
-        title: 'Tab 5',
-        items: ['Item 3-1', 'Item 3-2', 'Item 3-3'],
-    },
+    // {
+    //     title: 'AI2教学',
+    //     items: [{name: '角色1', id: 1}, ],
+    // },
+
 ]);
 
 const activeTabIndex = ref(0);
@@ -84,9 +70,12 @@ const pageInstance = getCurrentInstance();
 let observer = null;
 let set_click_close;
 const scrollToSection = (index) => {
+    console.log('clickedout', index)
+    console.log(sections.value)
     if (sections.value[index]) {
+        console.log('clicked', index)
         clearTimeout(set_click_close)
-        click_to_tab.value = true        
+        click_to_tab.value = true
         sections.value[index].scrollIntoView({ behavior: 'smooth' })
         activeTabIndex.value = index
         // 防止抖动
@@ -97,11 +86,43 @@ const scrollToSection = (index) => {
     }
 };
 
+const initRoles = async () => {
+    const res = await $request.get('/aiChatRoleType/get-tabs-items')
+    console.log(res)
+    tabs.value = res
+    await nextTick();
+    // 初始化 sections
+    const current_section = contentRef.value.querySelectorAll('.section');
+    console.log('获取 section 元素：', current_section);
+    if (current_section !== undefined && current_section !== null && current_section.length > 0) {
+        sections.value = current_section;
+    }
+
+    // 获取 tabs DOM 节点
+    vueTabs.value = tabsRef.value.querySelectorAll('.tab');
+    tabPostionY.value = tabsRef.value.getBoundingClientRect().y;
+    tabHeight.value = tabsRef.value?.clientHeight;
+
+
+};
+
+onBeforeMount(() => {
+    initRoles();
+});
+
+onBeforeUnmount(() => {
+    // 在组件卸载时移除监听事件
+    window.removeEventListener('scroll', scroll);
+});
+
 onMounted(async () => {
     // 等待下一次 DOM 更新，确保所有的 refs 都已被正确赋值
+
     await nextTick();
+
     // 获取所有的 section 元素
     const current_section = contentRef.value.querySelectorAll('.section');
+    console.log('---------', current_section)
     vueTabs.value = tabsRef.value.querySelectorAll('.tab');
     console.log(vueTabs)
     tabPostionY.value = tabsRef.value.getBoundingClientRect().y
@@ -109,8 +130,6 @@ onMounted(async () => {
 
     // 监听滚动事件
     window.addEventListener('scroll', scroll, true)
-
-    
     if (current_section !== undefined && current_section !== null && current_section.length > 0) {
         sections.value = current_section;
     }
@@ -146,7 +165,7 @@ onBeforeUnmount(() => {
 
 const choseRole = (tab_index, item_index) => {
     console.log('happened click', tab_index, item_index)
-    router.push('/home/roleInit/' + item_index)
+    router.push('/home/roleInit/' + tabs.value[tab_index]['items'][item_index].id)
 
 }
 
@@ -182,7 +201,7 @@ const choseRole = (tab_index, item_index) => {
     // background-color: red;
     position: absolute;
     width: 70%;
-    margin:0 auto;
+    margin: 0 auto;
     align-items: center;
     box-sizing: border-box;
     justify-content: center;
@@ -195,7 +214,7 @@ const choseRole = (tab_index, item_index) => {
     display: flex;
     top: 0;
     margin-left: 20px;
-    margin-top:40px;
+    margin-top: 40px;
     position: sticky;
     z-index: 1;
     // overflow: scroll;
@@ -254,7 +273,7 @@ const choseRole = (tab_index, item_index) => {
     // background-color: red;
     background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
     padding: 5px;
-    justify-content:center;
+    justify-content: center;
     align-items: center;
     margin-right: 30px;
     padding: 10px;

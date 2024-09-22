@@ -51,33 +51,25 @@
 import { ref, reactive, onMounted, onBeforeMount, inject, toRaw } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router'
 
 const $request = inject('$request')
 const router = useRouter()
+const route = useRoute()
 // 解析后端返回的表单字段
 const formFields = ref([])
 const dynamicForm = ref(null)
 // 动态生成表单数据和校验规则
 const formData = reactive({})
 const formRules = reactive({})
-
-const params = { id: '1', name: 'ly', phone: 13246566476, age: 23 }
 // 提交表单
 const submitForm = () => {
     dynamicForm.value.validate((valid) => {
         if (valid) {
-
             var data = toRaw(formData)
-            console.log('data', data)
-            // data = {name: '12', value: '12'}
-            console.log('pass', Object.entries(formData)
-                .map(([key, value]) => `${key}:${value}`)
-                .join('\r\n'))
             router.push({
                 name: 'chat',
-                state:  {data}
-
-
+                state: { data }
             })
         }
     })
@@ -116,9 +108,9 @@ const validateImageType = (file) => {
 onBeforeMount(() => {
     // 在组件加载前执行，例如从后端获取表单数据
 
-    $request.get('/formItem/getFormItemListByRoleId?roleId=1')
+    $request.get('/formItem/getFormItemListByRoleId?roleId='+route.params.roleId)
         .then(res => {
-            formFields.value = res
+            formFields.value = res.data
             formFields.value.forEach((field) => {
                 formData[field.name] = field.type === 'file' || field.type === 'image' ? [] : ''
                 if (field.required !== true) {

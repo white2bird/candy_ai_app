@@ -7,9 +7,12 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "aieditor": "^1.1.2",
     "axios": "^1.7.7",
     "element-plus": "^2.8.3",
+    "highlight.js": "^11.10.0",
     "less": "^4.2.0",
+    "marked": "^14.1.2",
     "sass": "^1.79.3",
     "vue": "^3.2.8",
     "vue-router": "^4.4.5",
