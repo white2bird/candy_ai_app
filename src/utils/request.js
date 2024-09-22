@@ -1,7 +1,8 @@
 import axios from 'axios'
 import router from '../router/index'
+import base_url from '@/config'
 const request = axios.create({
-    baseURL: 'http://localhost:8000', // 设置基础 URL
+    baseURL: base_url, // 设置基础 URL
     timeout: 5000, // 请间
     // 其他 Axios 配置项
 })

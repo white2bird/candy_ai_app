@@ -25,6 +25,7 @@ import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
 import { marked } from 'marked';
 import hljs from 'highlight.js';
+import base_url from '@/config';
 import 'highlight.js/styles/atom-one-dark.css'; // 使用深色主题
 
 
@@ -239,7 +240,7 @@ const firstAnswer = async () => {
 
 const streamRequest = async (userMessage) => {
     try {
-        const aiResponse = await fetch('http://localhost:8000/ai/chat/message/send-stream', {
+        const aiResponse = await fetch(base_url+'/ai/chat/message/send-stream', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
