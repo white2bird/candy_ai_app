@@ -61,7 +61,8 @@ const loginOrRegisterButtonName = computed(() =>
 let imageurl = "/images/touxiang.jpg"
 let menu_list = [
     { name: '应用', icon: '/images/apps.png', path: '/' },
-    { name: '我的', icon: '/images/own_my.png', path: '/my' }
+    { name: '我的', icon: '/images/own_my.png', path: '/my' },
+    { name: '聊天', icon: '/images/own_my.png', path: '/home/normalChat' },
 ]
 
 
