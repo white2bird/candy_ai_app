@@ -10,7 +10,8 @@
             </div>
 
             <div class="chat-input">
-                <input v-model="newMessage" type="text" placeholder="Type your message..." @keyup.enter="userSendMessage" />
+                <input v-model="newMessage" type="text" placeholder="Type your message..."
+                    @keyup.enter="userSendMessage" />
                 <button @click="userSendMessage">{{ sendButton }}</button>
             </div>
 
@@ -19,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, onBeforeMount,inject } from 'vue';
+import { ref, onMounted, nextTick, onBeforeMount, inject } from 'vue';
 import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
@@ -94,7 +95,7 @@ const sendMessage = async (message) => {
     }
     await streamRequest(userMessage);
 
-    
+
 };
 
 // const sendMessage = async () => {
@@ -203,8 +204,23 @@ onMounted(async () => {
             if (mutation.type === 'childList') {
                 const newElements = Array.from(mutation.addedNodes).filter(node => node.nodeType === Node.ELEMENT_NODE);
                 if (newElements.length > 0) {
-                    const curLastElement = newElements[0];
-                    if (lastDiv.value !== curLastElement) {
+                    console.log('newElements', newElements)
+                    const curLastElement = newElements[newElements.length - 1];
+                    console.log('---,', curLastElement)
+                    var all_gransons = curLastElement.querySelectorAll('*');
+                    if (all_gransons.length > 0) {
+                        var curGrandSonLast = all_gransons[all_gransons.length - 1];
+                        if(lastDiv.value !== curGrandSonLast){
+                            lastDiv.value = curGrandSonLast;
+                            if(scrollTimeout){
+                                clearTimeout(scrollTimeout);
+                            }
+                            scrollTimeout = setTimeout(() => {
+                                curGrandSonLast.scrollIntoView({ behavior: 'smooth' });
+                            }, 100);
+                        }
+                    }
+                    else if (lastDiv.value !== curLastElement) {
                         // 处理一下抖动
                         lastDiv.value = curLastElement;
                         // 清除之前的定时器，避免重复触发
@@ -228,27 +244,27 @@ onMounted(async () => {
         subtree: true,
     });
     // 处理第一次回答
-    if(isFirst.value === true){
-       isFirst.value = false
-       const roleIdData = await $request.post('/ai/chat/conversation/create-my', {roleId: roleId.value});
-       conversationId.value = roleIdData.data;
-       await firstAnswer();
+    if (isFirst.value === true) {
+        isFirst.value = false
+        const roleIdData = await $request.post('/ai/chat/conversation/create-my', { roleId: roleId.value });
+        conversationId.value = roleIdData.data;
+        await firstAnswer();
     }
-    
+
 });
 
 const firstAnswer = async () => {
     const data = history.state.data
     const formattedString = Object.entries(data)
-    .map(([key, value]) => `${key}: ${value}`)
-    .join('\n');
+        .map(([key, value]) => `${key}: ${value}`)
+        .join('\n');
     console.log(formattedString)
     await sendMessage(formattedString)
 }
 
 const streamRequest = async (userMessage) => {
     try {
-        const aiResponse = await fetch(base_url+'/ai/chat/message/send-stream-appoint-role', {
+        const aiResponse = await fetch(base_url + '/ai/chat/message/send-stream-appoint-role', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

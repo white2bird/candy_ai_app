@@ -175,10 +175,23 @@ onMounted(async () => {
             if (mutation.type === 'childList') {
                 const newElements = Array.from(mutation.addedNodes).filter(node => node.nodeType === Node.ELEMENT_NODE);
                 if (newElements.length > 0) {
-                    const curLastElement = newElements[0];
-                    // 寻找该元素的所有子元素
-                    
-                    if (lastDiv.value !== curLastElement) {
+                    console.log('newElements', newElements)
+                    const curLastElement = newElements[newElements.length - 1];
+                    console.log('---,', curLastElement)
+                    var all_gransons = curLastElement.querySelectorAll('*');
+                    if (all_gransons.length > 0) {
+                        var curGrandSonLast = all_gransons[all_gransons.length - 1];
+                        if(lastDiv.value !== curGrandSonLast){
+                            lastDiv.value = curGrandSonLast;
+                            if(scrollTimeout){
+                                clearTimeout(scrollTimeout);
+                            }
+                            scrollTimeout = setTimeout(() => {
+                                curGrandSonLast.scrollIntoView({ behavior: 'smooth' });
+                            }, 100);
+                        }
+                    }
+                    else if (lastDiv.value !== curLastElement) {
                         // 处理一下抖动
                         lastDiv.value = curLastElement;
                         // 清除之前的定时器，避免重复触发
