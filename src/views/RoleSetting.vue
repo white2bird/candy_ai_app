@@ -69,6 +69,9 @@ const submitForm = () => {
             var data = toRaw(formData)
             router.push({
                 name: 'chat',
+                query: {
+                    roleId: route.params.roleId
+                },
                 state: { data }
             })
         }

@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, onBeforeMount,inject } from 'vue';
 import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
@@ -29,7 +29,10 @@ import base_url from '@/config';
 import 'highlight.js/styles/atom-one-dark.css'; // 使用深色主题
 
 
+
+const $request = inject('$request')
 const isFirst = ref(true);
+
 const router = useRouter();
 const lastDiv = ref(null)
 const sendButton = ref('Send');
@@ -37,6 +40,8 @@ const replying = ref(false);
 const stop = ref(false);
 const newMessage = ref('');
 const route = useRoute();
+const roleId = ref(route.query.roleId)
+const conversationId = ref(null)
 const messages = ref([
     // { text: 'Hello!', role: 'user', renderedText: 'Hello!' },
     { text: 'Hi, how can I help you?', role: 'assistant', renderedText: 'Hi, how can I help you?' },
@@ -225,6 +230,8 @@ onMounted(async () => {
     // 处理第一次回答
     if(isFirst.value === true){
        isFirst.value = false
+       const roleIdData = await $request.post('/ai/chat/conversation/create-my', {roleId: roleId.value});
+       conversationId.value = roleIdData.data;
        await firstAnswer();
     }
     
@@ -248,7 +255,7 @@ const streamRequest = async (userMessage) => {
                 'token': localStorage.getItem('token'),
             },
             body: JSON.stringify({
-                // "conversationId": 1, todo会话id
+                "conversationId": conversationId.value,
                 "content": userMessage,
                 "useContext": false
             }),

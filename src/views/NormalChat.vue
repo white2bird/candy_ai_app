@@ -375,8 +375,8 @@ const streamRequest = async (userMessage) => {
     background: #343541de;
 }
 
-.copyCode.clicked {
-    color: green;
+:deep(.copyCode) {
+    cursor: pointer;
 }
 
 .chat-input {

@@ -12,7 +12,7 @@ const routes = [
         { path: '', component: RolePlatform},
         { path: 'roles', component: RolePlatform },
         { path: 'roleInit/:roleId', component: RoleSetting, props: true },
-        { path: 'chat', component: RoleModelChat, props: true, name: 'chat' },
+        { path: 'chat/:roleId', component: RoleModelChat, props: true, name: 'chat' },
         { path: 'normalChat', component: NormalChat, props: true, name: 'normalChat' },
       ]
     },
