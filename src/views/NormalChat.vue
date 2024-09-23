@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick,onBeforeMount,inject } from 'vue';
 import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
@@ -29,14 +29,14 @@ import base_url from '@/config';
 import 'highlight.js/styles/atom-one-dark.css'; // 使用深色主题
 
 
-const isFirst = ref(true);
+const $request = inject('$request');
+const conversationId = ref(null)
 const router = useRouter();
 const lastDiv = ref(null)
 const sendButton = ref('Send');
 const replying = ref(false);
 const stop = ref(false);
 const newMessage = ref('');
-const route = useRoute();
 const messages = ref([
     // { text: 'Hello!', role: 'user', renderedText: 'Hello!' },
     { text: 'Hi, how can I help you?', role: 'assistant', renderedText: 'Hi, how can I help you?' },
@@ -88,35 +88,23 @@ const sendMessage = async (message) => {
         querySelector.scrollIntoView({ behavior: 'smooth' });
     }
     await streamRequest(userMessage);
-
-    
 };
-// const sendMessage = async () => {
 
-//     if (newMessage.value.trim() !== '' && replying.value === false) {
-//         messages.value.push({ text: newMessage.value, role: 'user', renderedText: newMessage.value });
-//         const userMessage = newMessage.value;
-//         newMessage.value = '';
-//         // 当前屏幕滚动到用户提问处
-//         // 拿到 最后一个 message-sent class 的元素
-//         await nextTick();
-//         let querySelector = document.querySelector('.message-sent:last-child');
-//         if (querySelector) {
-//             querySelector.scrollIntoView({ behavior: 'smooth' });
-//         }
-//         await streamRequest(userMessage);
-//     }
-//     // 停止回答
-//     if (replying.value === true && sendButton.value === 'Stop') {
-//         stop.value = true;
-//     }
-// };
+onBeforeMount(() => {
+    $request.get('/ai/chat/conversation/get-default-chat-conversation-id')
+    .then(res =>{
+        if(res.code ==  200){
+            conversationId.value = res.data
+        }else {
+            ElMessage.error('获取默认会话失败');
+        }
+    })
+})
 
 const enhanceCodeBlock = (content) => {
     let enhance = content.replace(/<pre><code/g, '<pre><div class="enhance"><div class="lang">CODE</div><div class="copyCode">Copy<i class="el-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M128 320v576h576V320H128zm-32-64h640a32 32 0 0 1 32 32v640a32 32 0 0 1-32 32H96a32 32 0 0 1-32-32V288a32 32 0 0 1 32-32zM960 96v704a32 32 0 0 1-32 32h-96v-64h64V128H384v64h-64V96a32 32 0 0 1 32-32h576a32 32 0 0 1 32 32zM256 672h320v64H256v-64zm0-192h320v64H256v-64z"></path></svg></i></div></div><code')
     return enhance
 }
-
 
 
 
@@ -165,13 +153,6 @@ const vEnhanceCode = (el) => {
 
         }
     })
-    // 寻找到最后的任何子元素，屏幕滚动到这里 增加防抖处理
-
-    // let curLastDiv = el.querySelectorAll('div')[el.querySelectorAll('div').length - 1]
-    // if(lastDiv.value !== curLastDiv){
-    //     lastDiv.value = curLastDiv
-    //     curLastDiv.scrollIntoView({ behavior: 'smooth' });
-    // }
 }
 //监听代码滚动
 
@@ -185,9 +166,6 @@ const copy = (text) => {
 };
 
 
-
-
-
 onMounted(async () => {
     // setupCopyButtons();
     let scrollTimeout = null;
@@ -198,6 +176,8 @@ onMounted(async () => {
                 const newElements = Array.from(mutation.addedNodes).filter(node => node.nodeType === Node.ELEMENT_NODE);
                 if (newElements.length > 0) {
                     const curLastElement = newElements[0];
+                    // 寻找该元素的所有子元素
+                    
                     if (lastDiv.value !== curLastElement) {
                         // 处理一下抖动
                         lastDiv.value = curLastElement;
@@ -221,11 +201,7 @@ onMounted(async () => {
         childList: true,
         subtree: true,
     });
-    // 处理第一次回答
-    // if(isFirst.value === true){
-    //    isFirst.value = false
-    //    await firstAnswer();
-    // }
+
     
 });
 
@@ -240,16 +216,16 @@ const firstAnswer = async () => {
 
 const streamRequest = async (userMessage) => {
     try {
-        const aiResponse = await fetch(base_url+'/ai/chat/message/send-stream', {
+        const aiResponse = await fetch(base_url+'/ai/chat/message/send-stream-normal', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'token': localStorage.getItem('token'),
             },
             body: JSON.stringify({
-                "conversationId": 1,
+                "conversationId": conversationId.value,
                 "content": userMessage,
-                "useContext": false
+                "useContext": true
             }),
         });
         if (!aiResponse.ok) {

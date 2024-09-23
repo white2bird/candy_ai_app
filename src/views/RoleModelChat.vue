@@ -91,6 +91,7 @@ const sendMessage = async (message) => {
 
     
 };
+
 // const sendMessage = async () => {
 
 //     if (newMessage.value.trim() !== '' && replying.value === false) {
@@ -240,14 +241,14 @@ const firstAnswer = async () => {
 
 const streamRequest = async (userMessage) => {
     try {
-        const aiResponse = await fetch(base_url+'/ai/chat/message/send-stream', {
+        const aiResponse = await fetch(base_url+'/ai/chat/message/send-stream-appoint-role', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'token': localStorage.getItem('token'),
             },
             body: JSON.stringify({
-                "conversationId": 1,
+                // "conversationId": 1, todo会话id
                 "content": userMessage,
                 "useContext": false
             }),
