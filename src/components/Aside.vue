@@ -15,12 +15,13 @@
         </div>
         <div class="aside-body">
             <div v-for="(item, index) in menu_list" @click="itemClick(index)"
-                :style="{ 'display': 'flex', 'justify-content': 'space-around', 'background-color': current_index === index ? 'rgb(240, 240, 240)' : '' }">
+                :style="{ 'cursor':'pointer','display': 'flex', 'justify-content': 'space-around', 'background-color': current_index === index ? 'rgb(240, 240, 240)' : '' }">
                 <div style="display: flex; width: 40%; justify-content: center;">
                     <img style="width: 40%; height: auto;" :src="item.icon" alt="">
                 </div>
-                <div style="display: flex; width: 40%; justify-content: start;">
-                    <RouterLink :to="item.path">{{ item.name }}</RouterLink>
+                <div style="display: flex; width: 40%; justify-content: start;"  class="route-text">
+                    <!-- <RouterLink :to="item.path">{{ item.name }}</RouterLink> -->
+                     {{ item.name }}
                 </div>
                 <!-- </div> -->
             </div>
@@ -70,7 +71,7 @@ const itemClick = (index) => {
     console.log(index)
     current_index.value = index
     let route = menu_list[index].path
-    console.log('---path---', route)
+    router.push(route)
 }
 
 const logined = computed(() => { return store.state.loginButtonName !== '登录/注册' }
@@ -117,6 +118,10 @@ const mouseenter = () => {
 </script>
 
 <style lang="less" scoped>
+.route-text {
+    color: grey;
+    text-decoration: none;
+}
 .aside {
 
     display: flex;
