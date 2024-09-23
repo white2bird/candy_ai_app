@@ -241,6 +241,15 @@ const streamRequest = async (userMessage) => {
                 "useContext": true
             }),
         });
+
+        const contentType = aiResponse.headers.get('Content-Type');
+        if(contentType === 'application/json'){
+            let assistantMessage = { text: '', role: 'assistant', renderedText: '请求失败，请联系后台管理人员' };
+            messages.value.push(assistantMessage);
+            ElMessage.error('请求失败，请稍后再试');
+            return;
+        }
+        
         if (!aiResponse.ok) {
             if (aiResponse.status === 401) {
                 ElMessage.error('登录状态已过期，请重新登录')
